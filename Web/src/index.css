@@ -1,89 +1,162 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+html,
+body {
+  margin: 0;
+  min-width: 320px;
+  height: 100%;
 }
-a:hover {
-  color: #535bf2;
+
+#root {
+  height: 100%;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  overflow: hidden;
 }
 
 [data-modal-backdrop] {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 40;
 }
+
 [data-modal-content] {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: var(--background-color, #242424);
-  padding: 1rem;
-  min-width: 300px;
+  background: #171717;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  min-width: 320px;
+  max-width: 90vw;
+  z-index: 50;
 }
+
 [data-modal-content] header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+[data-modal-content] header h2 {
+  margin: 0;
+  font-size: 1.0625rem;
+  color: #f9fafb;
+}
+
+[data-modal-content] header button {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+[data-modal-content] header button:hover {
+  color: #f9fafb;
+}
+
+/* Modal form styles */
+[data-modal-content] label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.8125rem;
+  color: #9ca3af;
+}
+
+[data-modal-content] input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  color: #f9fafb;
+  font-size: 0.875rem;
+}
+
+[data-modal-content] input::placeholder {
+  font-weight: 500;
+}
+
+[data-modal-content] input:focus {
+  outline: none;
+  border-color: #ed4264;
+}
+
+[data-modal-content] .error-message {
+  color: #f87171;
+  font-size: 0.8rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+[data-modal-content] footer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-modal-content] footer button[type="button"] {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f9fafb;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+[data-modal-content] footer button[type="submit"] {
+  background: #ed4264;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+[data-modal-content] footer button[type="submit"]:hover:not(:disabled) {
+  background: #d93656;
+}
+
+[data-modal-content] footer button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Sonner toast - match design (pink bg, white text and close) */
+.toast-close-btn {
+  color: white !important;
+  opacity: 0.9;
+}
+.toast-close-btn:hover {
+  opacity: 1;
 }

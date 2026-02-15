@@ -3,13 +3,15 @@ import { useSearchUsers } from '../hooks/useSearchUsers';
 import { useGetUser } from '../hooks/useGetUser';
 import { SearchInputArea } from './user-search/SearchInputArea';
 import { SelectedUserDetail } from './user-search/SelectedUserDetail';
-import { CreateUserModal } from './user-search/CreateUserModal';
+import { CreateUserSection } from './user-search/CreateUserSection';
+import '../styles/user-search.css';
 
 export function UserSearchPage() {
   const [searchInput, setSearchInput] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [committedSearch, setCommittedSearch] = useState('');
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [createSectionExpanded, setCreateSectionExpanded] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(searchInput.trim()), 300);
@@ -19,41 +21,87 @@ export function UserSearchPage() {
   const { data: searchResults, isLoading: searchLoading } = useSearchUsers(debouncedSearch);
   const { data: selectedUser, isLoading: userLoading } = useGetUser(selectedUserId);
 
-  const showSuggestions = debouncedSearch.length >= 2;
+  const handleGo = () => {
+    const q = searchInput.trim();
+    if (q.length >= 2) {
+      setDebouncedSearch(q);
+      setCommittedSearch(q);
+    }
+  };
+
+  const showSuggestions = debouncedSearch.length >= 2 && !committedSearch;
+
+  const showCardsFromSearch = committedSearch && !selectedUserId;
+  const showCardsFromSelection = selectedUserId != null;
 
   return (
-    <div>
-      <h1>User Search</h1>
+    <div className="user-search-page">
+      <main className="user-search-main">
+        <SearchInputArea
+          value={searchInput}
+          onChange={(v) => {
+            setSearchInput(v);
+            setCommittedSearch('');
+            setSelectedUserId(null);
+          }}
+          results={searchResults}
+          isLoading={searchLoading}
+          showSuggestions={showSuggestions}
+          onSelectUser={(id) => {
+            setSelectedUserId(id);
+            setSearchInput('');
+            setCommittedSearch('');
+          }}
+          onGoClick={handleGo}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleGo();
+            }
+          }}
+        />
 
-      <SearchInputArea
-        value={searchInput}
-        onChange={setSearchInput}
-        results={searchResults}
-        isLoading={searchLoading}
-        showSuggestions={showSuggestions}
-        onSelectUser={setSelectedUserId}
+        {showCardsFromSelection && (
+          <section className="user-cards-section">
+            {userLoading && <p className="user-search-loading">Loading...</p>}
+            {!userLoading && selectedUser && (
+              <div className="user-cards-grid">
+                <SelectedUserDetail user={selectedUser} />
+              </div>
+            )}
+          </section>
+        )}
+
+        {showCardsFromSearch && (
+          <section className="user-cards-section">
+            {searchLoading && <p className="user-search-loading">Loading...</p>}
+            {!searchLoading && searchResults && searchResults.length === 0 && (
+              <p className="user-search-no-results">No matches</p>
+            )}
+            {!searchLoading && searchResults && searchResults.length > 0 && (
+              <div className="user-cards-grid">
+                {searchResults.map((user) => (
+                  <SelectedUserDetail key={user.id} user={user} />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+      </main>
+
+      <CreateUserSection
+        expanded={createSectionExpanded}
+        onToggle={() => setCreateSectionExpanded((v) => !v)}
       />
 
-      {selectedUserId != null && (
-        <section>
-          <h2>Selected User</h2>
-          {userLoading && <p>Loading...</p>}
-          {!userLoading && selectedUser && (
-            <SelectedUserDetail user={selectedUser} />
-          )}
-        </section>
-      )}
-
-      <section>
-        <button type="button" onClick={() => setCreateModalOpen(true)}>
-          Add User
-        </button>
-      </section>
-
-      <CreateUserModal
-        open={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-      />
+      <button
+        type="button"
+        className="user-search-new-btn"
+        data-create-trigger
+        onClick={() => setCreateSectionExpanded((v) => !v)}
+      >
+        New User +
+      </button>
     </div>
   );
 }

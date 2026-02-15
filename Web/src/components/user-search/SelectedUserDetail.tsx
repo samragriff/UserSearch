@@ -6,17 +6,13 @@ interface SelectedUserDetailProps {
 
 export function SelectedUserDetail({ user }: SelectedUserDetailProps) {
   return (
-    <dl>
-        <dt>First Name</dt>
-        <dd>{user.firstName}</dd>
-        <dt>Last Name</dt>
-        <dd>{user.lastName}</dd>
-        <dt>Job Title</dt>
-        <dd>{user.jobTitle}</dd>
-        <dt>Phone</dt>
-        <dd>{user.phone}</dd>
-        <dt>Email</dt>
-        <dd>{user.email}</dd>
-      </dl>
+    <div className="user-card">
+      <p className="user-card-name">
+        {user.firstName} {user.lastName}
+      </p>
+      <p className="user-card-detail">{user.jobTitle}</p>
+      <p className="user-card-detail">{user.phone}</p>
+      <p className="user-card-detail">{user.email}</p>
+    </div>
   );
 }
