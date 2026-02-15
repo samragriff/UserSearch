@@ -1,6 +1,8 @@
+using IResult = Microsoft.AspNetCore.Http.IResult;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UserSearch.API.Extensions;
+using UserSearch.API.Requests;
 using UserSearch.Core.Commands.CreateUserCommand;
 using UserSearch.Core.Queries.GetUserQuery;
 using UserSearch.Core.Queries.SearchUsersQuery;
@@ -48,9 +50,7 @@ internal static class UserEndpoints
             request.Email);
         var result = await mediator.Send(command);
         return result.IsSuccess
-            ? TypedResults.Created($"/users/{result.Value}", new { id = result.Value })
+            ? Results.StatusCode(StatusCodes.Status201Created)
             : result.ToApiResult();
     }
 }
-
-internal record CreateUserRequest(string FirstName, string LastName, string JobTitle, string Phone, string Email);

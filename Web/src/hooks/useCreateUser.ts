@@ -8,9 +8,8 @@ export function useCreateUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (request: CreateUserRequest): Promise<{ id: number }> => {
-      const { data } = await api.post<{ id: number }>(endpoints.users.create, request);
-      return data;
+    mutationFn: async (request: CreateUserRequest) => {
+      await api.post(endpoints.users.create, request);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.userSearch] });

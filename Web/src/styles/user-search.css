@@ -52,10 +52,15 @@
   flex: 1;
   border: none;
   padding: 0.65rem 1rem;
-  font-size: 12px;
-  font-weight: bold;
-  color: darkslategray;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111;
   background: transparent;
+}
+
+.user-search-input::placeholder {
+  color: #9ca3af;
 }
 
 .user-search-input:focus {
@@ -230,14 +235,12 @@
   gap: 0.75rem;
 }
 
-/* Row 1: First name and Last name each 50% */
 .user-search-create-form-row-1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 1rem;
 }
 
-/* Row 2: Job title, Phone, Email each 1/3 */
 .user-search-create-form-row-2 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -252,10 +255,13 @@
   width: 100%;
   box-sizing: border-box;
   padding: 0.65rem 1rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 9999px;
-  font-weight: 500;
+  color: #111;
 }
 
 .user-search-create-input::placeholder {

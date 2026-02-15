@@ -117,6 +117,8 @@ out/
 *.db
 *.mdf
 *.ldf
+*.db-shm
+*.db-wal
 
 ############################################
 # Optional: Docker (if you generate local overrides)

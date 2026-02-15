@@ -15,35 +15,20 @@ internal static class ResultExtensions
         if (result.IsSuccess)
             throw new InvalidOperationException("Cannot convert a successful result to a problem detail");
 
+        var (statusCode, title) = result.Status switch
+        {
+            ResultStatus.Invalid => (StatusCodes.Status400BadRequest, "Bad Request"),
+            ResultStatus.Conflict => (StatusCodes.Status409Conflict, "Conflict"),
+            _ => (StatusCodes.Status500InternalServerError, "Server Failure")
+        };
+
         return Results.Problem(
-            statusCode: GetStatusCode(result.Status),
-            title: GetTitle(result.Status),
+            statusCode: statusCode,
+            title: title,
             extensions: new Dictionary<string, object?>
             {
                 { "validationErrors", result.ValidationErrors },
                 { "errors", result.Errors }
             });
     }
-
-    private static string GetTitle(ResultStatus status) =>
-        status switch
-        {
-            ResultStatus.NotFound => "Not Found",
-            ResultStatus.Invalid => "Bad Request",
-            ResultStatus.Conflict => "Conflict",
-            ResultStatus.Forbidden => "Forbidden",
-            ResultStatus.Unauthorized => "Unauthorized",
-            _ => "Server Failure"
-        };
-
-    private static int GetStatusCode(ResultStatus status) =>
-        status switch
-        {
-            ResultStatus.NotFound => StatusCodes.Status404NotFound,
-            ResultStatus.Invalid => StatusCodes.Status400BadRequest,
-            ResultStatus.Conflict => StatusCodes.Status409Conflict,
-            ResultStatus.Forbidden => StatusCodes.Status403Forbidden,
-            ResultStatus.Unauthorized => StatusCodes.Status401Unauthorized,
-            _ => StatusCodes.Status500InternalServerError
-        };
 }

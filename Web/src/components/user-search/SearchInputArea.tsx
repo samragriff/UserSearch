@@ -40,12 +40,9 @@ export function SearchInputArea({
           Go!
         </button>
       </div>
-      {showSuggestions && (
+      {showSuggestions && !isLoading && hasResults && (
         <ul className="user-search-results">
           {isLoading && <li className="user-search-loading">Loading...</li>}
-          {!isLoading && !hasResults && (
-            <li className="user-search-no-results">No matches</li>
-          )}
           {!isLoading &&
             hasResults &&
             results!.map((user) => (

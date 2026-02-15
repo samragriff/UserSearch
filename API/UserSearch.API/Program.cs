@@ -1,9 +1,9 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using UserSearch.API;
 using UserSearch.API.Endpoints;
+using UserSearch.Core;
 using UserSearch.Core.Data;
-
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +26,7 @@ builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlite(conn);
 });
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UserSearch.Core.Queries.SearchUsersQuery.SearchUsersQuery).Assembly));
+builder.Services.AddUserSearchCore();
 
 var app = builder.Build();
 
